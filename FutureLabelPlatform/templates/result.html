@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>You are a Taglent now.</title>
+    
+    <style>
+
+        /* 1. 容器：设置相对定位，这是所有绝对定位元素的参考点 */
+        .label-container {
+            position: relative;
+            width: 500px; /* 标签的最终宽度 */
+            height: 600px; /* 标签的最终高度 */
+            margin: 50px auto; /* 居中显示 */
+            background-color: #FFFFFF; /* 示例深色背景 */
+            overflow: hidden; /* 隐藏溢出部分 */
+        }
+        
+        /* 2. 所有动态图片元素的基本样式 */
+        .element {
+            position: absolute; /* 绝对定位，实现叠加 */
+        }
+
+        /* 3. 层级控制 (z-index)  */
+        /* 背景元素 (UNI_BG): 在最底层 */
+        .background {z-index: 1; }
+        /* 光环元素 (UNI_HALO / MBTI): 中间层，可能需要缩放 */
+        .halo-layer { z-index: 3; }
+        /* 核心元素 (CORE): 最突出，居中 */
+        .core-icon { z-index: 5; }
+        /* 标签元素 (FRAME_FIXED): 边框或Logo，通常在文本之下 */
+        .fixed-frame-style {z-index: 7;}
+        .unit-gbp {z-index: 9;}
+        .bound-salary, .bound-age, bound-country { 
+            z-index: 11; /* 确保它们在背景上方，但在文本之下 */}
+        .major-icon-style {
+            z-index: 13; /* 位于固定框架和核心元素之间 */}
+
+
+        /* 4. 文本显示样式 */
+        @font-face {
+            font-family: 'FZLTTHJW'; /* 给您的字体取个名字 */
+            src: url("{{ url_for('static', filename='fonts/FZLTTHJW.ttf') }}") format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+        @font-face{
+            font-family:'Zhonghei';
+            src: url("{{ url_for('static', filename='fonts/方正兰亭中黑简体.ttf') }}") format('truetype');
+        }
+        .text-overlay {
+            font-family: 'FZLTTHJW', Arial, sans-serif;
+            z-index: 15; /* 确保文本在最上层 */
+            color: rgb(0, 0, 0); 
+        }
+        
+        /* 4. 布局切换样式 (重点) */
+        /* ------------------------------------------------- */
+        /* LAYOUT_M_01 */
+        .LAYOUT_M_01 .background { 
+            position: absolute;
+            width: 120.95px;
+            height: 120.9px;
+            left: 183.81px;
+            top: 13px;
+        }
+        .LAYOUT_M_01 .halo-layer {
+            position: absolute;
+            width: 120.9px;
+            height: 121.12px;
+            left: 183.86px;
+            top: 132.9px;
+        }
+        .LAYOUT_M_01 .bound-country-container {
+            position: absolute;
+            width: 120.34px;
+            height: 59.93px;
+            left: 184.14px;
+            top: 252.93px;
+        }
+        .LAYOUT_M_01 .nationality-value {
+            position: absolute;
+            left: 36.5%;
+            right: 40.83%;
+            top: 41%;
+            font-size: 70px;
+            font-family: 'Zhonghei', Arial, San-serif;
+            margin: 0;
+        }
+        .LAYOUT_M_01 .bound-salary {
+            position: absolute;
+            width: 197.36px;
+            height: 200px;
+            left: 107px;
+            top: 275px;
+            object-fit:fill;
+        }
+        .LAYOUT_M_01 .salary-value {
+            position: absolute;
+            left: 102px;
+            top: 296px;
+            letter-spacing: -10%;
+            font-size: 140px;
+            margin: 0;
+        }
+        .LAYOUT_M_01 .unit-gbp {
+            position: absolute;
+            left: 60.87%;
+            right: 31.19%;
+            top: 62.17%;
+            bottom: 27.16%;
+        }
+        .LAYOUT_M_01 .core-icon {
+            position: absolute;
+            left: 188px;
+            top: 436.71px;
+            width: 212.47px;
+            height: 80.62px;
+
+        }
+        .LAYOUT_M_01 .fixed-frame-style {
+            position: absolute;
+            left: 32.15%;
+            right: 47.04%;
+            top: 86.16%;
+            bottom: 0.03%;
+        }
+        .LAYOUT_M_01 .mbti {
+            position: absolute;
+            left: 52.9%;
+            right: 21.32%;
+            top: 86.09%;
+            bottom: 8.16%;
+        }
+
+        .LAYOUT_M_01 .major-icon-style {
+            position: absolute;
+            left: 54.65%;
+            right: 38.40%;
+            top: 92.5%;
+            bottom: 0.76%;
+        }
+        
+        .LAYOUT_M_01 .bound-age {
+            position: absolute;
+            height:49.55px;
+            left: 52.9%;
+            right: 21.32%;
+            top: 91.74%;
+        }
+
+        .LAYOUT_M_01 .age-label {
+            position: absolute;
+            font-family: 'FZLTTHJW', Arial, sans-serif;
+            font-size: 52px;
+            left: 318px;
+            top: 552.08px;
+        }
+
+
+    /* LAYOUT_M_02 */
+        .LAYOUT_M_02 .bound-country-container {
+            position: absolute;
+            left: 75.15px;
+            top:8px;
+            width:177.14px;
+            height:88.67px;
+        }
+        .LAYOUT_M_02 .nationality-value {
+            position: absolute;
+            font-size: 100px;
+            left: 80px;
+            top: 0px;
+            margin: 0;
+            font-family: 'Zhonghei', Arial, San-serif;
+        }
+        .LAYOUT_M_02 .background{
+            position: absolute;
+            width: 80.37px;
+            height: 80.37px;
+            left: 252.29px;
+            top: 88.43px;
+        }
+        .LAYOUT_M_02 .halo-layer {
+            position: absolute;
+            left: 252.29px;
+            top:168.23px;
+            width: 80.37px;
+            height: 80.37px;
+        }
+        .LAYOUT_M_02 .bound-salary {
+            position: absolute;
+            width: 215.88px;   
+            height: 136.6px;
+            left: 37px;
+            top: 247.98px;
+            object-fit:fill;
+        }
+        .LAYOUT_M_02 .salary-value {
+            position: absolute;
+            left: 46px;
+            top: 235px;
+            letter-spacing: -10%;
+            font-size: 150px;
+            margin: 0;
+        }
+        .LAYOUT_M_02 .unit-gbp {
+            position: absolute;
+            left: 252.29px;
+            top: 383.93px;
+            width: 40.28px;
+        }
+        .LAYOUT_M_02 .core-icon {
+            position: absolute;
+            left: 96px;
+            top: 384.02px;
+            height: 64px;
+        }
+        .LAYOUT_M_02 .fixed-frame-style {
+            position: absolute;
+            left: 153.16px;
+            top: 448.01px;
+            width: 77.18px;
+        }
+        .LAYOUT_M_02 .mbti {
+            position: absolute;
+            left: 229.74px;
+            top: 448.01px;
+            width:232.38px;
+        }
+        .LAYOUT_M_02 .bound-age{
+            position: absolute;
+            height:91.01px;
+            left: 229.74px;
+            top: 508.99px;
+        }
+        .LAYOUT_M_02 .major-icon-style {
+            position: absolute;
+            left: 245.4px;
+            top: 523.94px;
+            width:65.77px;
+        }
+        .LAYOUT_M_02 .age-label{
+            position: absolute;
+            font-family:'Zhonghei', Arial, sans-serif;
+            font-size: 100px;
+            left: 326px;
+            top: 501px;
+            margin: 0
+        }
+    /* LAYOUT_M_03 */
+        .LAYOUT_M_03 .bound-country-container {
+            position: absolute;
+            left: 288.68px;
+            top:134.9px;
+            width:177.34px;
+            height:88.2px;
+        }
+        .LAYOUT_M_03 .nationality-value {
+            position: absolute;
+            font-size: 100px;
+            left: 296px;
+            top: 124px;
+            margin: 0;
+            font-family: 'Zhonghei', Arial, San-serif;
+        }
+        .LAYOUT_M_03 .background{
+            position: absolute;
+            width: 65.85px;
+            left: 288.72px;
+            top: 4px;
+        }
+        .LAYOUT_M_03 .halo-layer {
+            position: absolute;
+            left: 288.72px;
+            top: 69.85px;
+            width: 65.85px;
+        }
+        .LAYOUT_M_03 .bound-salary {
+            position: absolute;
+            width: 258.94px;   
+            height: 167.82px;
+            left: 120.26px;
+            top: 220.82px;
+            object-fit:fill;
+        }
+        .LAYOUT_M_03 .salary-value {
+            position: absolute;
+            left: 120px;
+            top: 199px;
+            letter-spacing: -7%;
+            font-size: 188px;
+            margin: 0;
+        }
+        .LAYOUT_M_03 .unit-gbp {
+            position: absolute;
+            left: 288.98px;
+            top: 386.05px;
+            width: 73.76px;
+        }
+        .LAYOUT_M_03 .core-icon {
+            position: absolute;
+            left: 88.26px;
+            top: 386.01px;
+            height: 81.58px;
+        }
+        .LAYOUT_M_03 .fixed-frame-style {
+            position: absolute;
+            left: 185.07px;
+            top: 515.75px;
+            width: 104.51px;
+        }
+        .LAYOUT_M_03 .mbti {
+            position: absolute;
+            left: 288.96px;
+            top: 426.65px;
+            height:40.93px;
+
+        }
+        .LAYOUT_M_03 .bound-age{
+            position: absolute;
+            height:49.19px;
+            left: 288.96px;
+            top: 467.25px;
+            object-fit: fill;
+        }
+        .LAYOUT_M_03 .major-icon-style {
+            position: absolute;
+            left: 298.26px;
+            top: 475.54px;
+            width: 30px;
+        }
+        .LAYOUT_M_03 .age-label{
+            position: absolute;
+            font-family:'Zhonghei', Arial, sans-serif;
+            font-size: 56px;
+            left: 340px;
+            top: 462px;
+            margin: 0
+        }
+    /* LAYOUT_B_01 */
+        .LAYOUT_B_01 .background {
+            position: absolute;
+            width: 156.1px;
+            left: 220.16px;
+            top: 0px;
+            margin: 0px;
+        }
+        .LAYOUT_B_01 .bound-country-container {
+            position: absolute;
+            width: 155.3px;
+            height: 77.51px;
+            left: 220.6px;
+            top: 155.35px;
+        }
+        .LAYOUT_B_01 .nationality-value {
+            position: absolute;
+            font-size: 90px;
+            left: 220px;
+            top: 145px;
+            margin: 0;
+            font-family: 'Zhonghei', Arial, San-serif;
+        }
+        .LAYOUT_B_01 .bound-salary {
+            position: absolute;
+            width: 200.41px;
+            height: 127.99px;
+            left: 300px;
+            top: 232.86px;
+            margin: 0;
+            object-fit:fill;
+        }
+        .LAYOUT_B_01 .salary-value {
+            position: absolute;
+            left: 301px;
+            top: 216px;
+            font-size: 144px;
+            margin: 0;
+        }
+        .LAYOUT_B_01 .core-icon {
+            position: absolute;
+            left: 124.99px;
+            top: 360.52px;
+            width: 212.29px;
+            height: 86.11px;
+            margin: 0;
+        }
+        .LAYOUT_B_01 .unit-gbp {
+            position: absolute;
+            left: 336.56px;
+            top: 360.52px;
+            width: 74.84px;
+            margin: 0;
+        }
+        .LAYOUT_B_01 .fixed-frame-style {
+            position: absolute;
+            left: 215.53px;
+            top: 445.86px;
+            width:121.71px;
+            margin: 0;
+        }
+        .LAYOUT_B_01 .mbti {
+            position: absolute;
+            left: 336.84px;
+            top: 445.86px;
+            width:149.71px;
+            margin: 0;
+        }
+        .LAYOUT_B_01 .bound-age {
+            position: absolute;
+            height: 57.63px;
+            left: 336.56px;
+            top: 485.26px;
+            margin: 0;
+        }
+        .LAYOUT_B_01 .major-icon-style {
+            position: absolute;
+            left: 346.73px;
+            top: 495.05px;
+            width: 42.42px;
+            margin: 0;
+        }
+        .LAYOUT_B_01 .age-label {
+            position: absolute;
+            font-family: 'Zhonghei', Arial, sans-serif;
+            font-size: 68px;
+            left: 400px;
+            top: 476px;
+            margin: 0;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="label-container {{ layout_id }}">
+        <img src="{{ url_for('static', filename='images/' + background_uni_id + '.svg') }}" 
+             class="element background" alt="背景">
+        
+        <img src="{{ url_for('static', filename='images/' + halo_uni_id + '.svg') }}" 
+             class="element halo-layer" alt="光环">
+        
+        <img src="{{ url_for('static', filename='images/' + mbti_icon_id + '.svg') }}" 
+             class="element mbti" style="opacity: 0.5;" alt="MBTI徽章">
+
+        <img src="{{ url_for('static', filename='images/' + core_element_id + '.svg') }}" 
+             class="element core-icon" alt="核心图标">
+
+        <img src="{{ url_for('static', filename='images/' + fixed_frame_id + '.svg') }}" 
+             class="element fixed-frame-style" alt="固定边框">
+
+        <img src="{{ url_for('static', filename='images/' + major_svg_id + '.svg') }}" 
+         class="element major-icon-style" alt="专业徽章">
+
+         <img src="{{ url_for('static', filename='images/' + bound_salary_id + '.svg') }}" 
+         class="element bound-salary" alt="薪水定界框">
+         
+        <img src="{{ url_for('static', filename='images/' + bound_country_id + '.svg') }}" 
+            class="element bound-country-container" alt="英镑单位">
+        
+        <img src="{{ url_for('static', filename='images/' + bound_age_id + '.svg') }}" 
+            class="element bound-age" alt="年龄定界框">
+        
+        <img src="{{ url_for('static', filename='images/' + unit_gbp_id + '.svg') }}" 
+            class="element unit-gbp" alt="英镑单位">
+        
+        <div class="text-overlay">
+            <p class="salary-value">{{ salary_text }}</p> 
+            <p class="age-label">{{ age_text }}</p>
+            <p class="nationality-value">{{ nationality_text }}</p>
+    </div>
+</body>
+</html>
