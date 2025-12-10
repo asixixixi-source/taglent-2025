@@ -12,35 +12,32 @@
             src: url('/static/fonts/方正兰亭中黑简体.TTF') format('truetype');
         }
         body {
-        background-color: #ffffff; /* 纯黑背景 */
-        color: #000000; /* 纯白文字 */
-        font-family: 'Zhonghei', 'Arial', monospace; /* 字体优先级：Arial > Iosevka (等宽) > 默认等宽 */
-        margin: 0;
-        padding: 20px;
-        display: flex;
-        justify-content: center; /* 居中对齐 */
-        min-height: 50vh;
+            background-color: #ffffff; /* 纯黑背景 */
+            color: #000000; /* 纯白文字 */
+            font-family: 'Zhonghei', 'Arial', monospace; /* 字体优先级：Arial > Iosevka (等宽) > 默认等宽 */
+            margin: 0 auto;
+            padding: 30px;
+            max-width: 350px;
+            margin-top: 50px;
         }
 
         /* 确保所有文本可读性 */
+        .logo {
+            display:block;
+            max-width: 400px;
+            height: auto;
+            margin:0 auto;
+            margin-bottom: 30px;
+        }
+
         p, label, h1 {
             font-weight: 500;
         }
         .form-container {
-            width: 90%;
-            max-width: 600px;
-            border: 20px  #000000; /* 关键：白色边框营造电脑终端感 */
-            padding: 30px;
+            width: 100%;
+            max-width: 500px;
         }
-
-        h1 {
-            font-size: 50px;
-            margin-right:100px;
-            text-transform: uppercase; /* 转换为大写，更像终端命令 */
-            margin-top:0;
-            font-family: 'Arial', sans-serif;
-            font-weight: 800;
-        }
+        
         /* 确保每个输入字段占据一行，并有间距 */
         .form-group {
             margin-bottom: 0px;
@@ -104,7 +101,8 @@
 
 </head>
 <body>
-    <h1>Taglent <br> Generator <br> beta</h1>
+    <img src="{{ url_for('static', filename='images/LOGO.svg') }}"  class="logo"
+   
     
     <form method="POST" action="/submit">
         
@@ -113,7 +111,7 @@
         <label for="salary_expect">1. Your Expected Salary per Year (K,£):</label>
         <input type="number" id="salary_expect" name="salary_expect" required min="10" required max="99"><br><br>
         
-        <label for="nationality">2. Your Nationality:</label>
+        <label for="nationality">2. Your Nationality (in 2 letters):</label>
         <input type="text" id="nationality" name="nationality" maxlength="2" required><br><br>
         
         <label for="mbti_type">3. Your MBTI:</label>
@@ -122,10 +120,10 @@
         <label for="bachelor_uni">4. Your Undergraduate University:</label>
         <input type="text" id="bachelor_uni" name="bachelor_uni" required><br><br>
         
-        <label for="master_uni">5. Your Post-graduate University:</label>
+        <label for="master_uni">5. Your Postgraduate University (optional):</label>
         <input type="text" id="master_uni" name="master_uni"><br><br>
-
-        <label for="major">6. Your Major:</label>
+ 
+        <label for="major">6. Your Major of Study:</label>
         <select id="major" name="major" required>
             <option value="" disabled selected>Choose Your School</option>
             <option value="Arts & Design">Arts & Design</option>
